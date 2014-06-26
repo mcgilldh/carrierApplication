@@ -2,26 +2,38 @@
   <head>
     <title> Application for carrier updates </title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="ui_fns.js"></script>
     <link rel="stylesheet" type="text/css" href="applicationMain.css">
   </head>
   
   <body>
     <div id="main">
-      <div id="leftFrame">
-	
-	<form name="carrierId">	
+      <!-- <div id="leftFrame">
+	  
+	  <form name="carrierId">	
 	  Please insert Carrier Tracking ID: <input type="text" name="firstname">
 	</form>
-	<a href="#"><div id="submitID"> Search DB </div></a>
+	<a href="#"><div id="submitID" class="button" onclick="getInfo('test')"> Search DB </div></a>
+     </div> -->
+      <div id="searchBar">
+	<form name="carrierId">
+	  Please insert Carrier Tracking ID: <input type="text" name="idBar">	  
+	</form>
+	<a href="#"><div id="submitID" class="button" onclick="getInfo('test')"> Search DB </div></a>
       </div>
       
       <div id="middleFrame">
-	<h3> Inputs go here! </h3>
+	<div class="title">
+	  <h3 class="title"> Owner ID:  </h3>
+	</div>
+	<div id="mainInfo">
+	
+	</div> 
       </div>
       
-      <div id="rightFrame">
-	<a href="#"><div id="submitChanges"> Submit Changes </div></a>
-      </div>
+     <!-- <div id="rightFrame">
+	<a href="#"><div id="submitChanges" class="button"> Submit Changes </div></a>
+      </div> -->
     </div>
 
   </body>

@@ -1,25 +1,23 @@
 <html>
   <head>
     <title> Application for carrier updates </title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+
     <script src="ui_fns.js"></script>
     <link rel="stylesheet" type="text/css" href="applicationMain.css">
   </head>
   
   <body>
     <div id="main">
-      <!-- <div id="leftFrame">
-	  
-	  <form name="carrierId">	
-	  Please insert Carrier Tracking ID: <input type="text" name="firstname">
-	</form>
-	<a href="#"><div id="submitID" class="button" onclick="getInfo('test')"> Search DB </div></a>
-     </div> -->
+
       <div id="searchBar">
 	<form name="carrierId">
-	  Please insert Carrier Tracking ID: <input type="text" name="idBar">	  
+	  Please insert Carrier Tracking ID: <input type="text" name="idBar" id="idBar">	  
 	</form>
-	<a href="#"><div id="submitID" class="button" onclick="getInfo('test')"> Search DB </div></a>
+	<a href="#"><div id="submitID" class="button" onclick="getInfo($('#idBar').val())"> Search DB </div></a>
       </div>
       
       <div id="middleFrame">
@@ -31,9 +29,7 @@
 	</div> 
       </div>
       
-     <!-- <div id="rightFrame">
-	<a href="#"><div id="submitChanges" class="button"> Submit Changes </div></a>
-      </div> -->
+
     </div>
 
   </body>

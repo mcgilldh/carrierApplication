@@ -146,6 +146,10 @@ th.delete {
     width: 50px;
 }
 
+th.owner {
+    width: 250px;
+}
+
 
 
 #mainInfo {

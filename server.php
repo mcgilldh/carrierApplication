@@ -87,8 +87,26 @@ else if ($vars['mode']=='lists') {
         array_push($ownerEntry, array('name' => $row['own_nm'], 'id' => $row['own_id']));
     }
 
-    $mainArray['owner'] = $ownerEntry;
 
+
+    $typeEntry = array();
+    $termEntry = array();
+    
+    $getAttributeString = "SELECT * FROM codec";
+    $queryAttribute = mysqli_query($mysqli, $getAttributeString);
+    while ($row = mysqli_fetch_assoc($queryAttribute)) {
+        $attrName = $row['cd_attr_nm'];
+        $attrId = $row['cd_id'];
+        if ($attrName=="own_type_cd") {
+            array_push($typeEntry, array('name' => $attrName, 'id' => $attrId));
+        }
+        else if ($attrName=="own_term_cd") {
+            array_push($termEntry, array('name' => $attrName, 'id' => $attrId));
+        }
+    }
+    $mainArray['owner'] = $ownerEntry;
+    $mainArray['type'] = $typeEntry;
+    $mainArray['term'] = $termEntry;
     
 }
 

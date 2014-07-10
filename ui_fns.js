@@ -23,11 +23,15 @@ function refreshGlobalLists() {
 	.success(function( data ) {
 	    var jsonData = JSON.parse(data);
 	    for (var i in jsonData.owner) {
-		
-		ownerList[jsonData[i].id] = jsonData[i].name;
+		ownerList[jsonData.owner[i].id] = jsonData.owner[i].name;
 	    }
-	    
-
+	    for (var i in jsonData.type) {
+		typeList[jsonData.type[i].id] = jsonData.type[i].name;
+	    }
+	    for (var i in jsonData.term) {
+		termList[jsonData.term[i].id] = jsonData.term[i].name;
+	    }
+		 
 	});
 }
 

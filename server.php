@@ -3,7 +3,7 @@ include 'dbconfig.php';
 include 'dbconnect.php';
 
 
-$vars = $_GET; 
+$vars = $_POST; 
 
 $mainArray = array();
 
@@ -25,6 +25,11 @@ if (!empty($vars['carr_id'])) {
         $textile_inst_id = $ids[$i][0];
         $textile_id = $ids[$i][1];
 
+        $getImgUrlString = "SELECT * FROM img_detail WHERE vt_tracking='".$tracking."'";
+        $queryImg = mysqli_query($mysqli, $getImgUrlString);
+        $imgUrl = mysqli_fetch_assoc($queryImg)['textile_img'];
+            
+
         $getDescrString = "SELECT * FROM textile WHERE textile.textile_id=".$ids[$i][1];
         
         
@@ -42,7 +47,8 @@ if (!empty($vars['carr_id'])) {
                 "end" => $row['own_end_dt'],
                 "term" => $row['own_term_cd'],
                 "note" => "",
-                "provId" => $row['provenance_id']
+                "provId" => $row['provenance_id'],
+                "imgUrl" => $imgUrl
             );
 
             array_push($provList, $newProvRow);
@@ -73,12 +79,17 @@ if (!empty($vars['carr_id'])) {
     
 }
 
-else if ($vars['mode']=='owners') {
+else if ($vars['mode']=='lists') {
     $getOwnerString = "SELECT own_nm, own_id FROM textile_owner";
     $queryOwner = mysqli_query($mysqli, $getOwnerString);
+    $ownerEntry = array();
     while ($row = mysqli_fetch_assoc($queryOwner)) {
-        array_push($mainArray, array('name' => $row['own_nm'], 'id' => $row['own_id']));
+        array_push($ownerEntry, array('name' => $row['own_nm'], 'id' => $row['own_id']));
     }
+
+    $mainArray['owner'] = $ownerEntry;
+
+    
 }
 
 

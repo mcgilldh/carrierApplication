@@ -17,20 +17,28 @@ function refreshGlobalLists() {
 	type: "POST",
 	url: "server.php",
 	datatype: "json",
+	async: false,
 	data: { mode: "lists" }
 
     })
 	.success(function( data ) {
+	    ownerList = {};
+	    typeList = {};
+	    termList = {};
 	    var jsonData = JSON.parse(data);
 	    for (var i in jsonData.owner) {
 		ownerList[jsonData.owner[i].id] = jsonData.owner[i].name;
 	    }
 	    for (var i in jsonData.type) {
-		typeList[jsonData.type[i].id] = jsonData.type[i].name;
+		typeList[jsonData.type[i].id] = jsonData.type[i].value;
 	    }
 	    for (var i in jsonData.term) {
-		termList[jsonData.term[i].id] = jsonData.term[i].name;
+		termList[jsonData.term[i].id] = jsonData.term[i].value;
 	    }
+
+	    var typeTest = typeList;
+	    var termTest = termList;
+
 		 
 	});
 }
@@ -65,9 +73,10 @@ function getInfo(trackId) {
   
 */
 function generateOwnerList(id, selected) {
-    txt = "";
+    var txt = "";
+    var ownerTest = ownerList;
     txt += "<select id = 'owner"+id+"'>";
-    for (k in ownerList) {
+    for (var k in ownerList) {
 	if (arguments.length==2 && k==selected) {
 	   txt += "<option selected='selected' value='" + k + "'>" + ownerList[k] + "</option>";
 	}
@@ -78,6 +87,59 @@ function generateOwnerList(id, selected) {
     txt += "</select>";
     return txt;
 }
+
+
+/*Generates the html code for a drop down menu with the possible choices for types
+  of textile instances.
+  Arguments:
+  id - the id for the list
+  selected - which option should be selected by default
+
+  return: html string with the drop down
+  
+*/
+function generateTypeList(id, selected) {
+    var txt = "";
+
+    txt += "<select id = 'type"+id+"'>";
+    for (var k in typeList) {
+	if (arguments.length==2 && k==selected) {
+	   txt += "<option selected='selected' value='" + k + "'>" + typeList[k] + "</option>";
+	}
+	else {
+	    txt += "<option value='" + k + "'>" + typeList[k] + "</option>";
+	}
+    }
+    txt += "</select>";
+    return txt;
+}
+
+
+/*Generates the html code for a drop down menu with the possible choices for owners
+  of textile instances.
+  Arguments:
+  id - the id for the list
+  selected - which option should be selected by default
+
+  return: html string with the drop down
+  
+*/
+function generateTermList(id, selected) {
+    var txt = "";
+    txt += "<select id = 'term"+id+"'>";
+    for (var k in termList) {
+	if (arguments.length==2 && k==selected) {
+	   txt += "<option selected='selected' value='" + k + "'>" + termList[k] + "</option>";
+	}
+	else {
+	    txt += "<option value='" + k + "'>" + termList[k] + "</option>";
+	}
+    }
+    txt += "</select>";
+    return txt;
+}
+
+
 
 /* Generates html code for table of provenance information
    Arguments:
@@ -103,12 +165,12 @@ function generateProvenance(curProv, inst_id, iteration) {
 	txt += "<tr name='"+ curProv[k].provId +"'>";
 	txt += "<td class='delete' name='delete'><input type='checkbox'></td>"; 
 	txt += "<td name='owner'>"+generateOwnerList(tmp, curProv[k].owner)+"</td>";
-	txt += "<td name='type'><input type='text' value='" + curProv[k].type +"'></td>";
+	txt += "<td name='type'>"+generateTypeList(tmp, curProv[k].type)+"</td>";
 	txt += "<td name='start'><input id='datepickerStart"+ inst_id +"-" +  k
-	    + "' type='text' value='" + curProv[k].start +"'></td>";
-	txt += "<td name='start'><input id='datepickerEnd"+ inst_id +"-" +  k
-	    + "' type='text' value='" + curProv[k].end +"'></td>";
-	txt += "<td name='term'><input type='text' value='" + curProv[k].term + "'></td>";
+	    + "' type='text' value='" + dateSwitchFormat(curProv[k].start) +"'></td>";
+	txt += "<td name='end'><input id='datepickerEnd"+ inst_id +"-" +  k
+	    + "' type='text' value='" + dateSwitchFormat(curProv[k].end) +"'></td>";
+	txt += "<td name='term'>" + generateTermList(tmp, curProv[k].term)  + "</td>";
 	txt += "</tr>";
 	txt += "<tr><td colspan=5>Note: " + curProv[k].note +"</td></tr>";
 	
@@ -119,14 +181,52 @@ function generateProvenance(curProv, inst_id, iteration) {
     //We always add a blank row so that we can input a new row
     txt+="<tr name='new'>";
     txt+="<td name='delete'></td><td name='owner'>"+generateOwnerList(iteration)+"</td>";
-    txt+="<td name='type'><input type='text' ></td>";
+    txt+="<td name='type'>"+generateTypeList(iteration)+"</td>";
     txt+="<td name='start'><input type='text' id='datepickerStart"+iteration+"'></td>";
     txt+="<td name='end'><input type='text' id='datepickerEnd"+iteration+"'>";
-    txt+="</td><td name='term'><input type='text'></td>";
+    txt+="</td><td name='term'>"+generateTermList(iteration)+"</td>";
     txt+="</tr>";
+    txt+="</table><br>";
+
+    //Here, we give the user the option of adding a new owner/term/type
+    txt+="<h3>Add new Owner, Term or Type</h3>";
+    txt+="<table id='newListTable"+inst_id+"' border=1>";
+    txt+="<tr><td name='newListItem' colspan=3><input id='newList"+inst_id+"' type='text'></td>";
+    txt+="<td>";
+
+    txt+="<select id='newListSelect" + inst_id +"'>";
+    txt+="<option value='type'>Type</option>";
+    txt+="<option value='term'>Term</option>";
+    txt+="<option value='owner'>Owner</option";
+    txt+="</select>";
+
+
+    
+    txt+="</td></tr>";
     
     
-    txt+= "</table></form>";
+    txt+= "</table><br>";
+
+    //Here, we give the user the option of deleting a owner/term/type
+    txt+="<h3>Delete owner, Term or Type</h3>";
+    txt+="<table id='deleteListTable" + inst_id +"' border=1>";
+    txt+="<tr>";
+    txt+="<th class='delete'>Delete</th><th>Category</th>";
+    txt+="</tr>";
+    txt+="<tr>";
+    txt+="<td class='delete'><input id='deleteOwner"+inst_id+"' type='checkbox' ></td>";
+    txt+="<td>" + generateOwnerList('delete'+inst_id) +"</td>";
+    txt+="</tr>"
+    txt+="<tr>";
+    txt+="<td><input id='deleteType"+inst_id+"' type='checkbox'></td>";
+    txt+="<td>" + generateTypeList('delete'+inst_id) +"</td>";
+    txt+="</tr>";
+    txt+="<tr>";
+    txt+="<td><input id='deleteTerm"+inst_id+"' type='checkbox'></td>";
+    txt+="<td>" + generateTermList('delete'+inst_id) +"</td>";
+    txt+="</tr>";
+    txt+="</form></table>";
+
     return txt;
 }
 
@@ -153,13 +253,20 @@ function generateTags(tagData, inst_id) {
     
     var numTags = tagLength;
 
-    if (numTags>12)
-	numTags = parseInt((numTags / 4)/4);
-    else
-	numTags = 1;
+    if (navigator.userAgent.indexOf('Firefox') > -1 ){//Firefox
+	if (numTags>8)
+	    numTags = parseInt((numTags/6));
+	else
+	    numTags = 1;
+	
+    }
+    else {
+	if (numTags>12)
+	    numTags = parseInt((numTags / 4)/4)+1;
+	else
+	    numTags = 1;
+    }
 
-    if (numTags!=1)
-	alert(numTags);
     
     //We give 200px extra each time we add 4 tags to a column
     txt += "<div class='infoPointTagList' style='height:"+numTags*250+"px;'>"; 
@@ -210,7 +317,7 @@ function populateInfo(data) {
 
 	//Main text of the textile description
 	txt += "<h1>Textile Description</h1> ";
-	txt += "<textarea id = 'description" + inst_id + "' cols='100' rows='20'>" + data[i].description + "</textarea>";
+	txt += "<textarea id = 'description" + inst_id + "' cols='90' rows='18'>" + data[i].description + "</textarea>";
 	txt += "</div>";
 
 
@@ -258,7 +365,10 @@ function populateInfo(data) {
 }
 
 
-
+/*Submits the modifications that have been made to the requested carrier
+  Arguments: id - the carrier ID
+  Side-effects: All of the updates that have been given are made and the whole page is refreshed
+*/
 function submitChanges(id) {
     var description = $("#description" + id).val();
 
@@ -270,30 +380,37 @@ function submitChanges(id) {
 
     var curElem, type;
     var curTagId;
-    
+
+    //First we go through the tags and make a list of their values and which ones must be deleted
     for (var i in tagObjects) {
+	
 	curElem = tagObjects[i];
-	if (typeof curElem.getAttribute !== 'undefined') {
-	    type = curElem.getAttribute('type');
+	if (typeof curElem!='undefined') {
+	    if (typeof curElem.getAttribute != 'undefined') {
+		type = curElem.getAttribute('type');
+		
+		//These are to be deleted
+		if (type=='checkbox' && curElem.checked) {
+		    toDeleteTags.push(curElem.getAttribute('name'));
+		}
 
-	 
-
-	    if (type=='checkbox' && curElem.checked) {
-		toDeleteTags.push(curElem.getAttribute('name'));
-	    }
-
-	    else if (type=='text') {
-		curTagId = curElem.getAttribute('name');
-		tagContents[curTagId] = curElem.value;
+		//Otherwise we record the text to be entered into the DB
+		else if (type=='text') {
+		    curTagId = curElem.getAttribute('name');
+		    tagContents[curTagId] = curElem.value;
+		}
 	    }
 	}
 
     }
 
-    var provVals = {}
+    
+    var provVals = {} //An associative array of our provenance table
     var rowId;
     var colName, newRowData, ownElement, checkedDelete;
     var dateTmp, dateArray, month, day, year;
+
+    //Now we go through the provenance tables
     for (var i = 0, row; row = provTable.rows[i]; i++) {
 	rowId = row.getAttribute('name');
 	if (rowId!=null) {
@@ -301,6 +418,7 @@ function submitChanges(id) {
 	    for (var j = 0, col; col = row.cells[j]; j++) {
 		colName = col.getAttribute('name');
 
+		//Should this row be deleted?
 		if (colName == 'delete') {
 		    if (col.firstElementChild!=null){
 			checkedDelete = col.firstElementChild.checked;
@@ -309,15 +427,17 @@ function submitChanges(id) {
 		    
 		}
 
+		//Record all of the entered values - NOTE: Dates are displayed in different format from the databse
+		//That is why we run dateSwitchFormate()
 		else if (colName =='owner') {
 		    ownElement = col.firstElementChild;
 		    newRowData['owner'] = ownElement.options[ownElement.selectedIndex].value;
 
 		}
 		else if (colName == 'type') {
+		    typeElement = col.firstElementChild;
 		    if (col.firstElementChild!=null)
-			newRowData['type'] = col.firstElementChild.value;
-
+			newRowData['type'] = typeElement.options[typeElement.selectedIndex].value;
 		}
 		else if (colName == 'start') {
 		    if (col.firstElementChild!=null) {
@@ -347,8 +467,9 @@ function submitChanges(id) {
 		    }		    
 		}
 		else if (colName == 'term') {
+		    termElement = col.firstElementChild;
 		    if (col.firstElementChild!=null)
-			newRowData['term'] = col.firstElementChild.value;
+			newRowData['term'] = termElement.options[termElement.selectedIndex].value;
 		}
 	    }
 
@@ -357,19 +478,54 @@ function submitChanges(id) {
 
     }
 
+    //Now we must see if the user wants to add types, owners or terms...
+    var newListSelectElem = document.getElementById('newListSelect'+id);
+    var selectedOption = newListSelectElem[newListSelectElem.selectedIndex].value;
+    var newListData =  $('#newList'+id).val();
+
+    //We must also check if the user wants to delete an owner/type/term
+    var removeOwnerCheck = $('#deleteOwner' + id).attr('checked');
+    var removeTypeCheck = $('#deleteType' + id).attr('checked');
+    var removeTermCheck = $('#deleteTerm' + id).attr('checked');
+
+    var killOwners={}, killTypes={}, killTerms={};
+    if (removeOwnerCheck) {
+	var selector = document.getElementById('ownerdelete' + id);
+	var selectedValue = selector[selector.selectedIndex].value;
+	killOwners[0] = selectedValue;
+    }
+    if (removeTypeCheck) {
+	var selector = document.getElementById('typedelete' + id);
+	var selectedValue = selector[selector.selectedIndex].value;
+	killTypes[0] = selectedValue;
+    }
+    if (removeTermCheck) {
+	var selector = document.getElementById('termdelete' + id);
+	var selectedValue = selector[selector.selectedIndex].value;
+	killTerms[0] = selectedValue;
+    }
+
+    
     $.ajax({
 	type: "POST",
 	url: "server.php",
 	datatype: "text",
+	asynch: false,
 	data: { inst_id : id,
 		delete_tag_list : JSON.stringify(toDeleteTags),
 		modify_tag_list : JSON.stringify(tagContents),
 		prov_contents : JSON.stringify(provVals),
 		descr : description,
+		addList: newListData,
+		addListType: selectedOption ,
+		ownDel: JSON.stringify(killOwners),
+		typeDel: JSON.stringify(killTypes),
+		termDel: JSON.stringify(killTerms),
 		mode: "apply" }
 	
     })
 	.success(function( jsonData ) {
+	    refreshGlobalLists(); //Get the new list of owners, terms and types
 	    getInfo(curTrack);
 	});
 
@@ -377,7 +533,7 @@ function submitChanges(id) {
 }
 
 
-
+//Changes yyyy-mm-dd to mm/dd/yyyy
 function dateSwitchFormat(date) {
     var dateArray, year, month, day;
     if (date.indexOf("-")>-1) {

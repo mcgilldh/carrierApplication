@@ -96,6 +96,7 @@ div.addTagButton {
 
 div.tagMain {
     text-align: center;
+    overflow: auto;
 }
 
 div.tagMain h1 {
@@ -111,12 +112,15 @@ div.infoPointTagList {
     columns: 80px 4;
     -webkit-columns:80px 4; /* Safari and Chrome */
     -moz-columns:80px 4; /* Firefox */
+    -moz-column-fill: auto;
+
+
 }
 
 div.description {
     position: relative;
     height: 300px;
-    width: 80%;
+    
     padding-bottom: 25px;
 }
 div.description h1 {
@@ -131,6 +135,9 @@ div.provenance {
 }
 div.provenance h1 {
     font-size: 20px;
+}
+div.provenance h3 {
+    font-size: 15px;
 }
 div.provenance table {
     width: 90%;

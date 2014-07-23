@@ -22,7 +22,7 @@
       
       <div id="middleFrame">
 	<div class="title">
-	  <h3 class="title"> Owner ID:  </h3>
+	  <h3 id="ownerTitle" class="title"> Owner ID:  </h3>
 	</div>
 	<div id="mainInfo">
 	

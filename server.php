@@ -14,7 +14,11 @@ if (!empty($vars['carr_id'])) {
 
     //Get the textile_id of all relevant textiles
     $ids = array();
-    $getIdsQueryString = "SELECT * FROM textile_instance WHERE textile_instance.textile_carr_id=".$vars['carr_id'];
+    $getCarrIdQuery = "SELECT * FROM textile_carr WHERE vt_tracking='".$vars['carr_id']."'";
+    $carrIdResponse = mysqli_query($mysqli, $getCarrIdQuery);
+    $carrId = mysqli_fetch_assoc($carrIdResponse)['textile_carr_id'];
+    
+    $getIdsQueryString = "SELECT * FROM textile_instance WHERE textile_instance.textile_carr_id='".$carrId."'";
 
     $queryID = mysqli_query($mysqli, $getIdsQueryString); 
 
@@ -36,7 +40,13 @@ if (!empty($vars['carr_id'])) {
         $queryImg = mysqli_query($mysqli, $getImgUrlString);
         $imgUrl = mysqli_fetch_assoc($queryImg)['img_path'];
         //echo $imgUrl;
-            
+
+
+        //Get the current owner
+        $getOwnerString = "SELECT * FROM textile_instance WHERE textile_inst_id='".$textile_inst_id."'";
+        $queryOwner = mysqli_query($mysqli, $getOwnerString);
+        $curOwner = mysqli_fetch_assoc($queryOwner)['own_id'];
+        
         //Get the description
         $getDescrString = "SELECT * FROM textile WHERE textile.textile_id=".$ids[$i][1];
                 
@@ -72,6 +82,11 @@ if (!empty($vars['carr_id'])) {
             $tagList[$row['textile_meta_tag_id']] = $row['textile_meta_tag'];
         }
 
+
+
+
+
+
         //Create a new entry for this textile including all relevant information
         $newEntry = array(
             "description" => $descr,
@@ -80,7 +95,8 @@ if (!empty($vars['carr_id'])) {
             "tracking" => $tracking,
             "textile_id" => $textile_id,
             "textile_inst_id" => $textile_inst_id,
-            "imgUrl" => $imgUrl
+            "imgUrl" => $imgUrl,
+            "owner" => $curOwner
         );
 
         array_push($mainArray, $newEntry);

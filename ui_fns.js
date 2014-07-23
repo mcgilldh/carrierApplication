@@ -295,6 +295,11 @@ function populateInfo(data) {
     var txt = "";
     var curProv;
     var id, inst_id;
+
+    if (data.length>0) {
+	$('#ownerTitle').html("Owner ID: " + ownerList[data[0].owner]);
+    }
+    
     //For each textile, create an entry
     for (i in data) {
 	id = data[i].textile_id;

@@ -8,7 +8,9 @@ var curTrack;
 
 $(document).ready( function () {
     refreshGlobalLists();
-
+    $("body").keypress(function(e){
+	getInfo($('#idBar').val());
+    });
 });
 
 

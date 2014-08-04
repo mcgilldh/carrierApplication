@@ -1,13 +1,265 @@
-h3 {
-    color: red;
+
+
+
+body {
+    background-color: #E8E8E8 ;
+    color: black;
+    font-size: 20px;
+}
+
+.button {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    font-size: 15px;
+    background-color: black;
+    padding-top: 15px;
+    color: white;
+}
+
+.submitChanges {
+    width: 100px;
+    height: 50px;
+    text-align: center;
+    font-size: 20px;
+    background-color: black;
+    top: 50px;
+    color: white;
+}
+
+.floatLeft {
+    float: left;
+}
+
+.button:hover {
+    background-color: #A52A2A;
+}
+
+.submitChanges:hover {
+    background-color: #A52A2A;
 }
 
 
+a {
+    font-style: none;
+    text-decoration: none;
+    color: white;
+}
+
+
+div.title {
+    position:relative;
+    width: 80%;
+    margin: 0 auto;
+    border-bottom: 1px solid #A52A2A;
+}		   
+h3.title {
+    text-align: center;
+
+}
+
+
+div.info {
+    position:relative;
+    //height: 00px;
+    border: 3px solid #A52A2A ;
+    color: black;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+div.side {
+    position:relative;
+    float:left;
+    height: 100%;
+    width: 400px;
+}
+div.side img {
+    height: 300px;
+    width: 300px;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+div.side h2 {
+    font-size: 15px;
+}
+
+a.addTagButton {
+    float: left;
+    width: 20px;
+    height: 20px;
+}
+
+div.addTagButton {
+    background-color: black;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+
+}
+
+div.tagMain {
+    text-align: center;
+    overflow: auto;
+    
+}
+
+div.tagMain h1 {
+    font-size: 15px;
+}
+
+
+div.infoPointTagList {
+    position: relative;
+    width: 85%;
+    margin: 0 auto;
+    height: 100px;
+    /*columns: 80px 3;
+    -webkit-columns:80px 3;*/ /* Safari and Chrome */
+/*    -moz-columns:80px 3; */ /* Firefox */
+    /* -moz-column-fill: auto; */
+
+
+}
+
+ul{
+  width:760px;
+  margin-bottom:20px;
+  overflow:hidden;
+  border-top:1px solid #ccc;
+}
+li{
+  line-height:1.5em;
+  border-bottom:1px solid #ccc;
+  float:left;
+  display:inline;
+}
+
+div.description {
+    position: relative;
+    height: 500px;
+
+    
+    padding-bottom: 25px;
+}
+div.description h1 {
+    font-size: 20px;
+}
+
+div.provenance {
+    position: relative;
+    width: 85%;
+    /*padding-bottom: 25px;*/
+    text-align: center;
+    
+}
+div.provenance h1 {
+    font-size: 20px;
+}
+div.provenance h3 {
+    font-size: 15px;
+}
+div.provenance table {
+    width: 90%;
+    //border: 1px solid black;
+    table-layout: fixed;
+    margin: 0 auto;
+}
+div.provenance tr, th {
+    //border: 1px solid black;
+}
+
+th.delete {
+    width: 50px;
+}
+
+th.owner {
+    width: 250px;
+}
+
+
+
+#mainInfo {
+    position: relative;
+    width: 90%;
+    padding: 50px;
+    //height: 10px;
+    
+    margin: 0 auto;
+
+}
+
+/*
 #leftFrame {
     position: fixed;
     top: 0px;
     bottom: 0px;
     left: 0px;
-    width: 100px;
-    
+    width: 15%;
+    height: 100%;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-right: 5px solid #A52A2A ;
+}
+*/
+
+/*#middleFrame {
+    position: relative;
+    top: 0px;
+    width: 75%;
+    left: 15%;
+    right: 10%;
+
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-right: 15px;
+    padding-left: 15px;
+}*/
+
+
+/*
+#rightFrame {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 10%;
+    height: 100%;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-left: 5px solid #A52A2A ;
+}
+
+
+*/
+
+
+#searchBar {
+    position: static
+    left: 0;
+    top: 0;
+    height: 110px;
+    width: 150px;
+    font-size: 15px;
+    border: 3px solid #A52A2A ;
+}
+
+.carrInfo {
+    position: relative;
+    text-align: center;
+    float: bottom;
+    min-height: 300px;
+}
+
+.carrCol {
+    position: relative;
+    float: left;
+    padding: 25px;
+}
+.carrDescr {
+    float: bottom;
 }
